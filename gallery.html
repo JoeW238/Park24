@@ -10,114 +10,72 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --cream: #f5f0e8;
-      --warm-white: #faf8f4;
-      --charcoal: #1c1c1c;
-      --stone: #7a7264;
-      --gold: #b8975a;
-      --gold-light: #d4b07a;
-      --border: #e0d8cc;
+      --cream: #f5f0e8; --warm-white: #faf8f4; --charcoal: #1c1c1c;
+      --stone: #7a7264; --gold: #b8975a; --border: #e0d8cc;
     }
     html { scroll-behavior: smooth; }
     body { font-family: 'DM Sans', sans-serif; background: var(--warm-white); color: var(--charcoal); }
 
     nav {
       position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      background: rgba(250, 248, 244, 0.92);
-      backdrop-filter: blur(12px);
+      background: rgba(250,248,244,0.92); backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
       display: flex; align-items: center; justify-content: space-between;
       padding: 0 2rem; height: 64px;
     }
     .nav-brand { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 600; letter-spacing: 0.04em; color: var(--charcoal); text-decoration: none; }
     @media (max-width: 600px) { .nav-brand { display: none; } }
-    .nav-links { display: flex; gap: 0.1rem; align-items: center; }
-    .nav-links a { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: var(--stone); text-decoration: none; padding: 0.4rem 0.7rem; border-radius: 2rem; transition: all 0.2s; white-space: nowrap; }
+    .nav-links a { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: var(--stone); text-decoration: none; padding: 0.4rem 0.7rem; border-radius: 2rem; transition: all 0.2s; }
     .nav-links a:hover, .nav-links a.active { background: var(--charcoal); color: var(--cream); }
 
     .quick-nav { display: none; }
     @media (min-width: 768px) {
-      .quick-nav {
-        display: flex; gap: 0.75rem;
-        max-width: 1140px; margin: 0 auto;
-        padding: 1.25rem 1.5rem;
-        border-bottom: 1px solid var(--border);
-      }
+      .quick-nav { display: flex; gap: 0.75rem; max-width: 1140px; margin: 0 auto; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); }
+      .quick-nav a { flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.5rem; background: var(--cream); border: 1px solid var(--border); border-radius: 8px; padding: 0.7rem 1rem; text-decoration: none; color: var(--charcoal); font-size: 0.78rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase; transition: all 0.2s; }
+      .quick-nav a:hover { background: var(--charcoal); color: var(--cream); border-color: var(--charcoal); }
     }
-    .quick-nav a {
-      flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.5rem;
-      background: var(--cream); border: 1px solid var(--border); border-radius: 8px;
-      padding: 0.7rem 1rem; text-decoration: none; color: var(--charcoal);
-      font-size: 0.78rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase;
-      transition: all 0.2s; white-space: nowrap;
-    }
-    .quick-nav a:hover { background: var(--charcoal); color: var(--cream); border-color: var(--charcoal); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 
-    .page-header {
-      margin-top: 55px;
-      padding: 2rem 1.5rem 0;
-      max-width: 1140px;
-      margin-left: auto; margin-right: auto;
-    }
+    .page-header { margin-top: 64px; padding: 2rem 1.5rem 0; max-width: 1140px; margin-left: auto; margin-right: auto; }
     .section-label { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.7rem; }
     .page-header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 300; line-height: 1.1; }
     .page-header p { margin-top: 0.8rem; color: var(--stone); font-size: 0.92rem; max-width: 480px; line-height: 1.7; }
 
-    main { max-width: 1140px; margin: 0 auto; padding: 0 1.5rem 4rem; }
-
     .gallery-section { margin-top: 2rem; }
-    .gallery-section-title { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 400; color: var(--charcoal); margin-bottom: 1rem; padding-bottom: 0.7rem; border-bottom: 1px solid var(--border); }
+    .gallery-section-title { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 400; margin-bottom: 1rem; padding-bottom: 0.7rem; border-bottom: 1px solid var(--border); }
 
-    .photo-grid {
-      columns: 3;
-      column-gap: 10px;
-    }
+    .photo-grid { columns: 3; column-gap: 10px; }
     @media (max-width: 720px) { .photo-grid { columns: 2; } }
     @media (max-width: 440px) { .photo-grid { columns: 1; } }
 
     .photo-item {
-      break-inside: avoid;
-      margin-bottom: 10px;
-      border-radius: 8px;
-      overflow: hidden;
-      cursor: pointer;
-      position: relative;
+      break-inside: avoid; margin-bottom: 10px; border-radius: 8px;
+      overflow: hidden; cursor: pointer; position: relative;
     }
     .photo-item img {
-      width: 100%;
-      display: block;
+      width: 100%; display: block; border-radius: 8px;
     }
 
     .photo-overlay {
-      position: absolute; inset: 0;
-      background: rgba(28,28,28,0);
+      position: absolute; inset: 0; background: rgba(28,28,28,0);
       display: flex; align-items: center; justify-content: center;
       transition: background 0.25s;
     }
     .photo-item:hover .photo-overlay { background: rgba(28,28,28,0.38); }
-    .expand-icon { opacity: 0; color: #fff; font-size: 1.6rem; transition: opacity 0.25s, transform 0.25s; transform: scale(0.75); }
+    .expand-icon { opacity: 0; color: #fff; font-size: 1.6rem; transition: all 0.25s; transform: scale(0.75); }
     .photo-item:hover .expand-icon { opacity: 1; transform: scale(1); }
 
     .photo-caption {
       position: absolute; bottom: 0; left: 0; right: 0;
-      padding: 0.6rem 0.8rem;
-      background: linear-gradient(transparent, rgba(28,28,28,0.6));
-      font-size: 0.72rem;
-      color: rgba(255,255,255,0.8);
-      letter-spacing: 0.04em;
-      opacity: 0;
-      transition: opacity 0.25s;
+      padding: 0.6rem 0.8rem; background: linear-gradient(transparent, rgba(28,28,28,0.6));
+      font-size: 0.72rem; color: rgba(255,255,255,0.8); letter-spacing: 0.04em;
+      opacity: 0; transition: opacity 0.25s;
     }
     .photo-item:hover .photo-caption { opacity: 1; }
 
     .video-section { margin-top: 4rem; }
-    .video-section-title { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 400; color: var(--charcoal); margin-bottom: 1rem; padding-bottom: 0.7rem; border-bottom: 1px solid var(--border); }
+    .video-section-title { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 400; margin-bottom: 1rem; padding-bottom: 0.7rem; border-bottom: 1px solid var(--border); }
 
-    .video-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.2rem;
-    }
+    .video-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; }
     @media (max-width: 720px) { .video-grid { grid-template-columns: 1fr 1fr; } }
     @media (max-width: 480px) { .video-grid { grid-template-columns: 1fr; } }
 
@@ -125,101 +83,44 @@
     .video-wrap { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; }
     .video-wrap iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
     .video-meta { padding: 0.75rem 1rem 0.9rem; }
-    .video-title { font-size: 0.85rem; color: #fff; font-weight: 500; margin-bottom: 0.2rem; }
+    .video-title { font-size: 0.85rem; color: #fff; font-weight: 500; }
     .video-dur { font-size: 0.75rem; color: rgba(255,255,255,0.42); letter-spacing: 0.04em; }
 
     /* LIGHTBOX */
-    .lightbox {
-      display: none;
-      position: fixed; inset: 0; z-index: 999;
-      background: rgba(10,10,10,0.95);
-      align-items: center; justify-content: center;
-      padding: 1.5rem;
-    }
+    .lightbox { display: none; position: fixed; inset: 0; z-index: 999; background: rgba(10,10,10,0.95); align-items: center; justify-content: center; padding: 1.5rem; }
     .lightbox.open { display: flex; }
-    .lightbox-inner {
-      background: var(--charcoal);
-      border-radius: 12px;
-      max-width: 860px; width: 100%;
-      overflow: hidden;
-      position: relative;
-    }
-    .lightbox-img {
-      width: 100%;
-      min-height: 420px;
-      max-height: 78vh;
-      background: #111;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-    }
-    .lightbox-img img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-    }
+    .lightbox-inner { background: var(--charcoal); border-radius: 12px; max-width: 860px; width: 100%; overflow: hidden; position: relative; }
+    .lightbox-img { width: 100%; min-height: 420px; max-height: 78vh; background: #111; display: flex; align-items: center; justify-content: center; position: relative; }
+    .lightbox-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
     .lightbox-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(0,0,0,0.6);
-      color: white;
-      border: none;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.8rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      z-index: 20;
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(0,0,0,0.6); color: white; border: none;
+      width: 50px; height: 50px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem; cursor: pointer; transition: all 0.2s; z-index: 20;
     }
-    .lightbox-nav:hover {
-      background: rgba(0,0,0,0.85);
-      transform: translateY(-50%) scale(1.1);
-    }
-    .prev { left: 15px; }
-    .next { right: 15px; }
+    .lightbox-nav:hover { background: rgba(0,0,0,0.85); transform: translateY(-50%) scale(1.1); }
+    .prev { left: 15px; } .next { right: 15px; }
 
     .lightbox-close {
       position: absolute; top: 15px; right: 15px;
-      background: rgba(255,255,255,0.15);
-      border: none; cursor: pointer;
-      color: #fff; font-size: 1.4rem;
-      width: 42px; height: 42px;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      z-index: 30;
+      background: rgba(255,255,255,0.15); border: none; color: #fff;
+      font-size: 1.4rem; width: 42px; height: 42px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center; z-index: 30;
     }
     .lightbox-close:hover { background: rgba(255,255,255,0.3); }
 
     .lightbox-label {
-      padding: 1rem 1.4rem;
-      font-size: 0.88rem;
-      color: rgba(255,255,255,0.75);
-      letter-spacing: 0.04em;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      padding: 1rem 1.4rem; font-size: 0.88rem; color: rgba(255,255,255,0.75);
+      letter-spacing: 0.04em; display: flex; justify-content: space-between;
     }
 
-    .back-link {
-      display: inline-flex; align-items: center; gap: 0.4rem;
-      margin-top: 3rem;
-      font-size: 0.83rem;
-      color: var(--stone);
-      text-decoration: none;
-      letter-spacing: 0.04em;
-      transition: color 0.2s, gap 0.2s;
-    }
+    .back-link { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 3rem; font-size: 0.83rem; color: var(--stone); text-decoration: none; transition: all 0.2s; }
     .back-link:hover { color: var(--charcoal); gap: 0.65rem; }
     .back-link::before { content: '←'; }
 
-    footer { border-top: 1px solid var(--border); padding: 2rem 1.5rem; text-align: center; font-size: 0.78rem; color: var(--stone); letter-spacing: 0.04em; }
+    footer { border-top: 1px solid var(--border); padding: 2rem 1.5rem; text-align: center; font-size: 0.78rem; color: var(--stone); }
   </style>
 </head>
 <body>
@@ -252,33 +153,34 @@
   <div class="gallery-section">
     <div class="gallery-section-title">Interior Spaces</div>
     <div class="photo-grid">
-      <div class="photo-item" onclick="openLightbox('Photo 1', 'Inside/S1.jpg')"><img src="Inside/S1.jpg" alt="Photo 1" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 1</div></div>
-      <div class="photo-item" onclick="openLightbox('Photo 2', 'Inside/S2.jpg')"><img src="Inside/S2.jpg" alt="Photo 2" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 2</div></div>
-      <div class="photo-item" onclick="openLightbox('Photo 3', 'Inside/S3.jpg')"><img src="Inside/S3.jpg" alt="Photo 3" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 3</div></div>
-      <div class="photo-item" onclick="openLightbox('Photo 4', 'Inside/S4.jpg')"><img src="Inside/S4.jpg" alt="Photo 4" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 4</div></div>
-      <div class="photo-item" onclick="openLightbox('Photo 5', 'Inside/S4A.JPEG')"><img src="Inside/S4A.JPEG" alt="Photo 5" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 5</div></div>
-      <div class="photo-item" onclick="openLightbox('Photo 6', 'Inside/S4B.JPEG')"><img src="Inside/S4B.JPEG" alt="Photo 6" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 6</div></div>
-      <div class="photo-item" onclick="openLightbox('Photo 7', 'Inside/S4C.jpg')"><img src="Inside/S4C.jpg" alt="Photo 7" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 7</div></div>
-      <div class="photo-item" onclick="openLightbox('Photo 8', 'Inside/S5.JPEG')"><img src="Inside/S5.JPEG" alt="Photo 8" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 8</div></div>
-      <div class="photo-item" onclick="openLightbox('Photo 9', 'Inside/S5A.JPEG')"><img src="Inside/S5A.JPEG" alt="Photo 9" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 9</div></div>
-      <div class="photo-item" onclick="openLightbox('Photo 10', 'Inside/S6.jpg')"><img src="Inside/S6.jpg" alt="Photo 10" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 10</div></div>
-      <div class="photo-item" onclick="openLightbox('Photo 11', 'Inside/S7.jpg')"><img src="Inside/S7.jpg" alt="Photo 11" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 11</div></div>
-      <div class="photo-item" onclick="openLightbox('Photo 12', 'Inside/S8.jpg')"><img src="Inside/S8.jpg" alt="Photo 12" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 12</div></div>
-      <div class="photo-item" onclick="openLightbox('Photo 13', 'Inside/S9.jpg')"><img src="Inside/S9.jpg" alt="Photo 13" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 13</div></div>
-      <div class="photo-item" onclick="openLightbox('Photo 14', 'Inside/S11.jpg')"><img src="Inside/S11.jpg" alt="Photo 14" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 14</div></div>
-      <div class="photo-item" onclick="openLightbox('Photo 15', 'Inside/S12.jpg')"><img src="Inside/S12.jpg" alt="Photo 15" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 15</div></div>
-      <div class="photo-item" onclick="openLightbox('Photo 16', 'Inside/S13.jpg')"><img src="Inside/S13.jpg" alt="Photo 16" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 16</div></div>
-      <div class="photo-item" onclick="openLightbox('Photo 17', 'Inside/S14.jpg')"><img src="Inside/S14.jpg" alt="Photo 17" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 17</div></div>
-      <div class="photo-item" onclick="openLightbox('Photo 18', 'Inside/S15.jpg')"><img src="Inside/S15.jpg" alt="Photo 18" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 18</div></div>
-      <div class="photo-item" onclick="openLightbox('Photo 19', 'Inside/S16.JPEG')"><img src="Inside/S16.JPEG" alt="Photo 19" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 19</div></div>
-      <div class="photo-item" onclick="openLightbox('Photo 20', 'Inside/S17.JPEG')"><img src="Inside/S17.JPEG" alt="Photo 20" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 20</div></div>
-      <div class="photo-item" onclick="openLightbox('Photo 21', 'Inside/S18.JPEG')"><img src="Inside/S18.JPEG" alt="Photo 21" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 21</div></div>
-      <div class="photo-item" onclick="openLightbox('Photo 22', 'Inside/S19.JPEG')"><img src="Inside/S19.JPEG" alt="Photo 22" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 22</div></div>
-      <div class="photo-item" onclick="openLightbox('Photo 23', 'Inside/S20.jpg')"><img src="Inside/S20.jpg" alt="Photo 23" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 23</div></div>
+      <div class="photo-item" onclick="openLightbox('Photo 1', 'Inside/S1.jpg')"><img src="Inside/S1.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Photo 1" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 1</div></div>
+      <div class="photo-item" onclick="openLightbox('Photo 2', 'Inside/S2.jpg')"><img src="Inside/S2.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Photo 2" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 2</div></div>
+      <div class="photo-item" onclick="openLightbox('Photo 3', 'Inside/S3.jpg')"><img src="Inside/S3.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Photo 3" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 3</div></div>
+      <div class="photo-item" onclick="openLightbox('Photo 4', 'Inside/S4.jpg')"><img src="Inside/S4.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Photo 4" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 4</div></div>
+      <div class="photo-item" onclick="openLightbox('Photo 5', 'Inside/S4A.JPEG')"><img src="Inside/S4A.JPEG" loading="lazy" decoding="async" width="1200" height="800" alt="Photo 5" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 5</div></div>
+      <div class="photo-item" onclick="openLightbox('Photo 6', 'Inside/S4B.JPEG')"><img src="Inside/S4B.JPEG" loading="lazy" decoding="async" width="1200" height="800" alt="Photo 6" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 6</div></div>
+      <div class="photo-item" onclick="openLightbox('Photo 7', 'Inside/S4C.jpg')"><img src="Inside/S4C.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Photo 7" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 7</div></div>
+      <div class="photo-item" onclick="openLightbox('Photo 8', 'Inside/S5.JPEG')"><img src="Inside/S5.JPEG" loading="lazy" decoding="async" width="1200" height="800" alt="Photo 8" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 8</div></div>
+      <div class="photo-item" onclick="openLightbox('Photo 9', 'Inside/S5A.JPEG')"><img src="Inside/S5A.JPEG" loading="lazy" decoding="async" width="1200" height="800" alt="Photo 9" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 9</div></div>
+      <div class="photo-item" onclick="openLightbox('Photo 10', 'Inside/S6.jpg')"><img src="Inside/S6.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Photo 10" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 10</div></div>
+      <div class="photo-item" onclick="openLightbox('Photo 11', 'Inside/S7.jpg')"><img src="Inside/S7.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Photo 11" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 11</div></div>
+      <div class="photo-item" onclick="openLightbox('Photo 12', 'Inside/S8.jpg')"><img src="Inside/S8.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Photo 12" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 12</div></div>
+      <div class="photo-item" onclick="openLightbox('Photo 13', 'Inside/S9.jpg')"><img src="Inside/S9.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Photo 13" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 13</div></div>
+      <div class="photo-item" onclick="openLightbox('Photo 14', 'Inside/S11.jpg')"><img src="Inside/S11.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Photo 14" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 14</div></div>
+      <div class="photo-item" onclick="openLightbox('Photo 15', 'Inside/S12.jpg')"><img src="Inside/S12.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Photo 15" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 15</div></div>
+      <div class="photo-item" onclick="openLightbox('Photo 16', 'Inside/S13.jpg')"><img src="Inside/S13.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Photo 16" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 16</div></div>
+      <div class="photo-item" onclick="openLightbox('Photo 17', 'Inside/S14.jpg')"><img src="Inside/S14.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Photo 17" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 17</div></div>
+      <div class="photo-item" onclick="openLightbox('Photo 18', 'Inside/S15.jpg')"><img src="Inside/S15.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Photo 18" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 18</div></div>
+      <div class="photo-item" onclick="openLightbox('Photo 19', 'Inside/S16.JPEG')"><img src="Inside/S16.JPEG" loading="lazy" decoding="async" width="1200" height="800" alt="Photo 19" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 19</div></div>
+      <div class="photo-item" onclick="openLightbox('Photo 20', 'Inside/S17.JPEG')"><img src="Inside/S17.JPEG" loading="lazy" decoding="async" width="1200" height="800" alt="Photo 20" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 20</div></div>
+      <div class="photo-item" onclick="openLightbox('Photo 21', 'Inside/S18.JPEG')"><img src="Inside/S18.JPEG" loading="lazy" decoding="async" width="1200" height="800" alt="Photo 21" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 21</div></div>
+      <div class="photo-item" onclick="openLightbox('Photo 22', 'Inside/S19.JPEG')"><img src="Inside/S19.JPEG" loading="lazy" decoding="async" width="1200" height="800" alt="Photo 22" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 22</div></div>
+      <div class="photo-item" onclick="openLightbox('Photo 23', 'Inside/S20.jpg')"><img src="Inside/S20.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Photo 23" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Photo 23</div></div>
 
-      <div class="photo-item" onclick="openLightbox('Portrait 1', 'Inside/S21.JPEG')"><img src="Inside/S21.JPEG" alt="Portrait 1" style="height:340px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Portrait 1</div></div>
-      <div class="photo-item" onclick="openLightbox('Portrait 2', 'Inside/S22.JPEG')"><img src="Inside/S22.JPEG" alt="Portrait 2" style="height:340px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Portrait 2</div></div>
-      <div class="photo-item" onclick="openLightbox('Portrait 3', 'Inside/S23.JPEG')"><img src="Inside/S23.JPEG" alt="Portrait 3" style="height:340px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Portrait 3</div></div>
+      <!-- Portraits -->
+      <div class="photo-item" onclick="openLightbox('Portrait 1', 'Inside/S21.JPEG')"><img src="Inside/S21.JPEG" loading="lazy" decoding="async" width="800" height="1200" alt="Portrait 1" style="height:340px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Portrait 1</div></div>
+      <div class="photo-item" onclick="openLightbox('Portrait 2', 'Inside/S22.JPEG')"><img src="Inside/S22.JPEG" loading="lazy" decoding="async" width="800" height="1200" alt="Portrait 2" style="height:340px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Portrait 2</div></div>
+      <div class="photo-item" onclick="openLightbox('Portrait 3', 'Inside/S23.JPEG')"><img src="Inside/S23.JPEG" loading="lazy" decoding="async" width="800" height="1200" alt="Portrait 3" style="height:340px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Portrait 3</div></div>
     </div>
   </div>
 
@@ -286,41 +188,41 @@
   <div class="gallery-section">
     <div class="gallery-section-title">Exterior</div>
     <div class="photo-grid">
-      <div class="photo-item" onclick="openLightbox('Exterior 1', 'Outside/O1.jpg')"><img src="Outside/O1.jpg" alt="Exterior 1" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 1</div></div>
-      <div class="photo-item" onclick="openLightbox('Exterior 2', 'Outside/O3.jpg')"><img src="Outside/O3.jpg" alt="Exterior 2" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 2</div></div>
-      <div class="photo-item" onclick="openLightbox('Exterior 3', 'Outside/O4.jpg')"><img src="Outside/O4.jpg" alt="Exterior 3" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 3</div></div>
-      <div class="photo-item" onclick="openLightbox('Exterior 4', 'Outside/O5.jpg')"><img src="Outside/O5.jpg" alt="Exterior 4" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 4</div></div>
-      <div class="photo-item" onclick="openLightbox('Exterior 5', 'Outside/O6.jpg')"><img src="Outside/O6.jpg" alt="Exterior 5" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 5</div></div>
-      <div class="photo-item" onclick="openLightbox('Exterior 6', 'Outside/O7.jpg')"><img src="Outside/O7.jpg" alt="Exterior 6" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 6</div></div>
-      <div class="photo-item" onclick="openLightbox('Exterior 7', 'Outside/O8.JPEG')"><img src="Outside/O8.JPEG" alt="Exterior 7" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 7</div></div>
-      <div class="photo-item" onclick="openLightbox('Exterior 8', 'Outside/O9.JPEG')"><img src="Outside/O9.JPEG" alt="Exterior 8" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 8</div></div>
-      <div class="photo-item" onclick="openLightbox('Exterior 9', 'Outside/O10.JPEG')"><img src="Outside/O10.JPEG" alt="Exterior 9" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 9</div></div>
-      <div class="photo-item" onclick="openLightbox('Exterior 10', 'Outside/O11.jpg')"><img src="Outside/O11.jpg" alt="Exterior 10" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 10</div></div>
-      <div class="photo-item" onclick="openLightbox('Exterior 11', 'Outside/O12.jpg')"><img src="Outside/O12.jpg" alt="Exterior 11" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 11</div></div>
-      <div class="photo-item" onclick="openLightbox('Exterior 12', 'Outside/O13.jpg')"><img src="Outside/O13.jpg" alt="Exterior 12" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 12</div></div>
-      <div class="photo-item" onclick="openLightbox('Exterior 13', 'Outside/O14.jpg')"><img src="Outside/O14.jpg" alt="Exterior 13" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 13</div></div>
-      <div class="photo-item" onclick="openLightbox('Exterior 14', 'Outside/O15.jpg')"><img src="Outside/O15.jpg" alt="Exterior 14" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 14</div></div>
-      <div class="photo-item" onclick="openLightbox('Exterior 15', 'Outside/O16.jpg')"><img src="Outside/O16.jpg" alt="Exterior 15" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 15</div></div>
-      <div class="photo-item" onclick="openLightbox('Exterior 16', 'Outside/O17.jpg')"><img src="Outside/O17.jpg" alt="Exterior 16" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 16</div></div>
-      <div class="photo-item" onclick="openLightbox('Exterior 17', 'Outside/O18.jpg')"><img src="Outside/O18.jpg" alt="Exterior 17" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 17</div></div>
-      <div class="photo-item" onclick="openLightbox('Exterior 18', 'Outside/O19.jpg')"><img src="Outside/O19.jpg" alt="Exterior 18" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 18</div></div>
-      <div class="photo-item" onclick="openLightbox('Exterior 19', 'Outside/O20.jpg')"><img src="Outside/O20.jpg" alt="Exterior 19" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 19</div></div>
-      <div class="photo-item" onclick="openLightbox('Exterior 20', 'Outside/O21.jpg')"><img src="Outside/O21.jpg" alt="Exterior 20" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 20</div></div>
-      <div class="photo-item" onclick="openLightbox('Exterior 21', 'Outside/O22.jpg')"><img src="Outside/O22.jpg" alt="Exterior 21" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 21</div></div>
-      <div class="photo-item" onclick="openLightbox('Exterior Portrait', 'Outside/O23.jpg')"><img src="Outside/O23.jpg" alt="Exterior Portrait" style="height:340px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior Portrait</div></div>
+      <div class="photo-item" onclick="openLightbox('Exterior 1', 'Outside/O1.jpg')"><img src="Outside/O1.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Exterior 1" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 1</div></div>
+      <div class="photo-item" onclick="openLightbox('Exterior 2', 'Outside/O3.jpg')"><img src="Outside/O3.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Exterior 2" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 2</div></div>
+      <div class="photo-item" onclick="openLightbox('Exterior 3', 'Outside/O4.jpg')"><img src="Outside/O4.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Exterior 3" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 3</div></div>
+      <div class="photo-item" onclick="openLightbox('Exterior 4', 'Outside/O5.jpg')"><img src="Outside/O5.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Exterior 4" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 4</div></div>
+      <div class="photo-item" onclick="openLightbox('Exterior 5', 'Outside/O6.jpg')"><img src="Outside/O6.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Exterior 5" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 5</div></div>
+      <div class="photo-item" onclick="openLightbox('Exterior 6', 'Outside/O7.jpg')"><img src="Outside/O7.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Exterior 6" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 6</div></div>
+      <div class="photo-item" onclick="openLightbox('Exterior 7', 'Outside/O8.JPEG')"><img src="Outside/O8.JPEG" loading="lazy" decoding="async" width="1200" height="800" alt="Exterior 7" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 7</div></div>
+      <div class="photo-item" onclick="openLightbox('Exterior 8', 'Outside/O9.JPEG')"><img src="Outside/O9.JPEG" loading="lazy" decoding="async" width="1200" height="800" alt="Exterior 8" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 8</div></div>
+      <div class="photo-item" onclick="openLightbox('Exterior 9', 'Outside/O10.JPEG')"><img src="Outside/O10.JPEG" loading="lazy" decoding="async" width="1200" height="800" alt="Exterior 9" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 9</div></div>
+      <div class="photo-item" onclick="openLightbox('Exterior 10', 'Outside/O11.jpg')"><img src="Outside/O11.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Exterior 10" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 10</div></div>
+      <div class="photo-item" onclick="openLightbox('Exterior 11', 'Outside/O12.jpg')"><img src="Outside/O12.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Exterior 11" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 11</div></div>
+      <div class="photo-item" onclick="openLightbox('Exterior 12', 'Outside/O13.jpg')"><img src="Outside/O13.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Exterior 12" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 12</div></div>
+      <div class="photo-item" onclick="openLightbox('Exterior 13', 'Outside/O14.jpg')"><img src="Outside/O14.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Exterior 13" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 13</div></div>
+      <div class="photo-item" onclick="openLightbox('Exterior 14', 'Outside/O15.jpg')"><img src="Outside/O15.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Exterior 14" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 14</div></div>
+      <div class="photo-item" onclick="openLightbox('Exterior 15', 'Outside/O16.jpg')"><img src="Outside/O16.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Exterior 15" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 15</div></div>
+      <div class="photo-item" onclick="openLightbox('Exterior 16', 'Outside/O17.jpg')"><img src="Outside/O17.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Exterior 16" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 16</div></div>
+      <div class="photo-item" onclick="openLightbox('Exterior 17', 'Outside/O18.jpg')"><img src="Outside/O18.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Exterior 17" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 17</div></div>
+      <div class="photo-item" onclick="openLightbox('Exterior 18', 'Outside/O19.jpg')"><img src="Outside/O19.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Exterior 18" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 18</div></div>
+      <div class="photo-item" onclick="openLightbox('Exterior 19', 'Outside/O20.jpg')"><img src="Outside/O20.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Exterior 19" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 19</div></div>
+      <div class="photo-item" onclick="openLightbox('Exterior 20', 'Outside/O21.jpg')"><img src="Outside/O21.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Exterior 20" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 20</div></div>
+      <div class="photo-item" onclick="openLightbox('Exterior 21', 'Outside/O22.jpg')"><img src="Outside/O22.jpg" loading="lazy" decoding="async" width="1200" height="800" alt="Exterior 21" style="height:190px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior 21</div></div>
+      <div class="photo-item" onclick="openLightbox('Exterior Portrait', 'Outside/O23.jpg')"><img src="Outside/O23.jpg" loading="lazy" decoding="async" width="800" height="1200" alt="Exterior Portrait" style="height:340px;object-fit:cover;"><div class="photo-overlay"><span class="expand-icon">⊕</span></div><div class="photo-caption">Exterior Portrait</div></div>
     </div>
   </div>
 
-  <!-- VIDEOS -->
+  <!-- VIDEO TOURS -->
   <div class="video-section">
     <div class="video-section-title">Video Tours</div>
     <div class="video-grid">
       <div class="video-card">
-        <div class="video-wrap"><iframe src="https://www.youtube.com/embed/efaFGLfcKrw" allowfullscreen></iframe></div>
+        <div class="video-wrap"><iframe src="https://www.youtube.com/embed/efaFGLfcKrw" title="Day Tour" allowfullscreen loading="lazy"></iframe></div>
         <div class="video-meta"><div class="video-title">Day Tour</div><div class="video-dur">4:12</div></div>
       </div>
       <div class="video-card">
-        <div class="video-wrap"><iframe src="https://www.youtube.com/embed/ww-N1Jsi2bw" allowfullscreen></iframe></div>
+        <div class="video-wrap"><iframe src="https://www.youtube.com/embed/ww-N1Jsi2bw" title="Night Tour" allowfullscreen loading="lazy"></iframe></div>
         <div class="video-meta"><div class="video-title">Night Tour</div><div class="video-dur">2:05</div></div>
       </div>
     </div>
@@ -333,14 +235,11 @@
 <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
   <div class="lightbox-inner">
     <button class="lightbox-close" onclick="closeLightboxDirect()">✕</button>
-    
     <div class="lightbox-img" id="lightbox-img">
       <img id="lightbox-image" src="" alt="">
     </div>
-
     <button class="lightbox-nav prev" onclick="prevImage()">‹</button>
     <button class="lightbox-nav next" onclick="nextImage()">›</button>
-
     <div class="lightbox-label">
       <span id="lightbox-label"></span>
       <span id="image-counter"></span>
@@ -353,7 +252,7 @@
 </footer>
 
 <script>
-  const galleryImages = [ /* same array as before - all 48 images */ 
+  const galleryImages = [
     {label: "Photo 1", src: "Inside/S1.jpg"}, {label: "Photo 2", src: "Inside/S2.jpg"}, {label: "Photo 3", src: "Inside/S3.jpg"},
     {label: "Photo 4", src: "Inside/S4.jpg"}, {label: "Photo 5", src: "Inside/S4A.JPEG"}, {label: "Photo 6", src: "Inside/S4B.JPEG"},
     {label: "Photo 7", src: "Inside/S4C.jpg"}, {label: "Photo 8", src: "Inside/S5.JPEG"}, {label: "Photo 9", src: "Inside/S5A.JPEG"},
