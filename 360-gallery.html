@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>360° Tour — Park 24</title>
+
+  <!-- Pannellum: lightweight WebGL 360 viewer -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css" />
+  <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #f5f0e8;
+      --warm-white: #faf8f4;
+      --charcoal: #1c1c1c;
+      --charcoal2: #2a2a2a;
+      --stone: #7a7264;
+      --gold: #b8975a;
+      --gold-light: #d4b07a;
+      --border: #e0d8cc;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--charcoal); color: #fff; min-height: 100vh; }
+
+    /* NAV */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      background: rgba(28, 28, 28, 0.92);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 64px;
+    }
+    .nav-brand { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 600; letter-spacing: 0.04em; color: #fff; text-decoration: none; }
+    @media (max-width: 600px) { .nav-brand { display: none; } }
+    .nav-links { display: flex; gap: 0.1rem; align-items: center; }
+    .nav-links a { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: rgba(255,255,255,0.45); text-decoration: none; padding: 0.4rem 0.7rem; border-radius: 2rem; transition: all 0.2s; white-space: nowrap; }
+    .nav-links a:hover { color: #fff; background: rgba(255,255,255,0.1); }
+    .nav-links a.active { background: var(--gold); color: #fff; }
+
+    /* QUICK NAV — desktop only, dark theme */
+    .quick-nav { display: none; }
+    @media (min-width: 768px) {
+      .quick-nav {
+        display: flex; gap: 0.75rem;
+        max-width: 1200px; margin: 0 auto;
+        padding: 1.25rem 2rem;
+        border-bottom: 1px solid rgba(255,255,255,0.07);
+      }
+    }
+    .quick-nav a {
+      flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px;
+      padding: 0.7rem 1rem; text-decoration: none; color: rgba(255,255,255,0.6);
+      font-size: 0.78rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase;
+      transition: all 0.2s; white-space: nowrap;
+    }
+    .quick-nav a:hover { background: var(--gold); color: #fff; border-color: var(--gold); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+    .quick-nav-icon { font-size: 1rem; }
+
+    /* PAGE HEADER */
+    .page-header {
+      margin-top: 64px;
+      padding: 3rem 2rem 0;
+      max-width: 1200px; margin-left: auto; margin-right: auto;
+      display: flex; align-items: flex-end; justify-content: space-between;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    .header-left {}
+    .section-label { font-size: 0.68rem; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.6rem; }
+    .page-header h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(1.8rem, 5vw, 3rem); font-weight: 300; line-height: 1.1; color: #fff; }
+    .page-header p { margin-top: 0.5rem; color: rgba(255,255,255,0.4); font-size: 0.85rem; line-height: 1.6; max-width: 420px; }
+
+    .hint-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 2rem;
+      padding: 0.45rem 1rem;
+      font-size: 0.75rem;
+      color: rgba(255,255,255,0.45);
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+    .hint-badge span { font-size: 1rem; }
+
+    /* MAIN VIEWER */
+    .viewer-section {
+      max-width: 1200px; margin: 2rem auto 0; padding: 0 2rem;
+    }
+    .viewer-shell {
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+      background: #111;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    #panorama-viewer {
+      width: 100%;
+      height: clamp(320px, 55vh, 620px);
+    }
+
+    /* Pannellum overrides */
+    .pnlm-container { background: #111 !important; }
+    .pnlm-load-box { background: rgba(28,28,28,0.9) !important; border-radius: 8px; }
+    .pnlm-load-box p { color: rgba(255,255,255,0.5) !important; font-family: 'DM Sans', sans-serif !important; font-size: 0.8rem; }
+    .pnlm-lbar { background: var(--gold) !important; }
+    .pnlm-lbar-fill { background: var(--gold-light) !important; }
+    .pnlm-controls { margin: 10px !important; }
+    .pnlm-controls button { background: rgba(28,28,28,0.85) !important; border: 1px solid rgba(255,255,255,0.12) !important; color: #fff !important; border-radius: 6px !important; }
+    .pnlm-controls button:hover { background: var(--gold) !important; }
+
+    /* VIEWER META BAR */
+    .viewer-meta {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.9rem 1.2rem;
+      background: rgba(255,255,255,0.04);
+      border-top: 1px solid rgba(255,255,255,0.07);
+      flex-wrap: wrap; gap: 0.5rem;
+    }
+    .viewer-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 400; color: #fff; }
+    .viewer-count { font-size: 0.75rem; color: rgba(255,255,255,0.35); letter-spacing: 0.06em; }
+    .viewer-nav-btns { display: flex; gap: 0.4rem; }
+    .viewer-nav-btns button {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      padding: 0.4rem 0.9rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    .viewer-nav-btns button:hover { background: var(--gold); border-color: var(--gold); }
+    .viewer-nav-btns button:disabled { opacity: 0.25; cursor: not-allowed; }
+
+    /* AUTOROTATE TOGGLE */
+    .autorotate-btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.55);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.8rem;
+      border-radius: 2rem;
+      cursor: pointer;
+      transition: all 0.18s;
+    }
+    .autorotate-btn.on { background: rgba(184,151,90,0.2); border-color: var(--gold); color: var(--gold-light); }
+    .autorotate-btn .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+    /* THUMBNAIL STRIP */
+    .thumb-section {
+      max-width: 1200px; margin: 1.5rem auto 0; padding: 0 2rem;
+    }
+    .thumb-strip-label {
+      font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(255,255,255,0.25); margin-bottom: 0.8rem;
+    }
+    .thumb-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 8px;
+    }
+    .thumb-item {
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      aspect-ratio: 2/1;
+      border: 2px solid transparent;
+      transition: border-color 0.2s, transform 0.18s;
+    }
+    .thumb-item:hover { transform: translateY(-2px); }
+    .thumb-item.active { border-color: var(--gold); }
+
+    .thumb-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      /* equirectangular images show the middle strip as the most natural thumbnail */
+      object-position: center 40%;
+    }
+
+    /* Placeholder thumb (shown when no real image) */
+    .thumb-placeholder {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0.3rem;
+      font-size: 0.62rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+    }
+    .thumb-placeholder .room-icon { font-size: 1.1rem; }
+
+    .thumb-360-badge {
+      position: absolute; top: 4px; right: 4px;
+      background: rgba(184,151,90,0.85);
+      border-radius: 3px;
+      font-size: 0.55rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: #fff;
+      padding: 1px 5px;
+      text-transform: uppercase;
+    }
+
+    .thumb-label {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 0.4rem 0.5rem;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      font-size: 0.65rem;
+      color: rgba(255,255,255,0.75);
+      letter-spacing: 0.04em;
+    }
+
+    /* INSTRUCTIONS BANNER */
+    .instructions {
+      max-width: 1200px; margin: 1.5rem auto; padding: 0 2rem;
+    }
+    .instructions-inner {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 10px;
+      padding: 1rem 1.4rem;
+      display: flex; gap: 2rem; flex-wrap: wrap;
+      align-items: center;
+    }
+    .instr-item { display: flex; align-items: center; gap: 0.6rem; font-size: 0.78rem; color: rgba(255,255,255,0.35); }
+    .instr-icon { font-size: 1.1rem; }
+
+    /* HOW TO USE YOUR OWN IMAGES */
+    .setup-section {
+      max-width: 1200px; margin: 0 auto 4rem; padding: 0 2rem;
+    }
+    .setup-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 1.5rem 1.8rem;
+    }
+    .setup-title { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 400; color: rgba(255,255,255,0.7); margin-bottom: 0.8rem; }
+    .setup-steps { display: flex; flex-direction: column; gap: 0.5rem; }
+    .setup-step { display: flex; gap: 0.8rem; font-size: 0.82rem; color: rgba(255,255,255,0.35); line-height: 1.5; }
+    .setup-num { color: var(--gold); font-weight: 600; flex-shrink: 0; min-width: 18px; }
+    code { background: rgba(255,255,255,0.08); border-radius: 4px; padding: 0.1rem 0.4rem; font-size: 0.8rem; color: var(--gold-light); font-family: monospace; }
+
+    /* BACK LINK */
+    .back-link { display: inline-flex; align-items: center; gap: 0.4rem; margin: 2rem 2rem 0; font-size: 0.83rem; color: rgba(255,255,255,0.35); text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s, gap 0.2s; }
+    .back-link:hover { color: #fff; gap: 0.65rem; }
+    .back-link::before { content: '←'; }
+
+    footer { border-top: 1px solid rgba(255,255,255,0.07); padding: 2rem 1.5rem; text-align: center; font-size: 0.75rem; color: rgba(255,255,255,0.2); letter-spacing: 0.04em; margin-top: 2rem; }
+
+    @media (max-width: 600px) {
+      .page-header { padding: 2rem 1rem 0; }
+      .viewer-section, .thumb-section, .instructions, .setup-section { padding: 0 1rem; }
+      .thumb-strip { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+      .instructions-inner { gap: 0.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">Park 24</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="360-gallery.html" class="active">360° Tour</a>
+    <a href="contact.html">Contact</a>
+  </div>
+</nav>
+
+<!-- QUICK NAV (desktop only) -->
+<div class="quick-nav">
+  <a href="index.html"><span class="quick-nav-icon">🏠</span> Home</a>
+  <a href="gallery.html"><span class="quick-nav-icon">🖼️</span> Gallery</a>
+  <a href="contact.html"><span class="quick-nav-icon">✉️</span> Contact Agent</a>
+</div>
+
+<div class="page-header" style="margin-top: 0; padding-top: 2rem;">
+  <div class="header-left">
+    <div class="section-label">Interactive 360° Tour</div>
+    <h1>Explore Every Room</h1>
+    <p>GoPro Max panoramas — drag to look around, scroll to zoom, or use the controls.</p>
+  </div>
+  <div style="display:flex; gap:0.6rem; flex-wrap:wrap; align-self:center;">
+    <div class="hint-badge"><span>🖱️</span> Drag to look around</div>
+    <div class="hint-badge"><span>🔍</span> Scroll to zoom</div>
+    <div class="hint-badge"><span>📱</span> Touch &amp; tilt on mobile</div>
+  </div>
+</div>
+
+<!-- MAIN VIEWER -->
+<div class="viewer-section">
+  <div class="viewer-shell">
+    <div id="panorama-viewer"></div>
+    <div class="viewer-meta">
+      <div>
+        <div class="viewer-title" id="viewer-label">Living Room</div>
+        <div class="viewer-count" id="viewer-count">1 of 8</div>
+      </div>
+      <div style="display:flex; align-items:center; gap:0.7rem; flex-wrap:wrap;">
+        <button class="autorotate-btn on" id="autorotate-btn" onclick="toggleAutorotate()">
+          <span class="dot"></span> Auto-rotate
+        </button>
+        <div class="viewer-nav-btns">
+          <button id="btn-prev" onclick="changeScene(-1)">← Prev</button>
+          <button id="btn-next" onclick="changeScene(1)">Next →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- THUMBNAIL STRIP -->
+<div class="thumb-section">
+  <div class="thumb-strip-label">All Spaces — click to jump</div>
+  <div class="thumb-strip" id="thumb-strip"></div>
+</div>
+
+<!-- CONTROLS GUIDE -->
+<div class="instructions">
+  <div class="instructions-inner">
+    <div class="instr-item"><span class="instr-icon">🖱️</span> Click &amp; drag to pan</div>
+    <div class="instr-item"><span class="instr-icon">⬆️</span> Scroll wheel to zoom</div>
+    <div class="instr-item"><span class="instr-icon">⛶</span> Double-click for fullscreen</div>
+    <div class="instr-item"><span class="instr-icon">📱</span> Drag or tilt on mobile</div>
+    <div class="instr-item"><span class="instr-icon">⌨️</span> Arrow keys to navigate</div>
+  </div>
+</div>
+
+<!-- SETUP INSTRUCTIONS -->
+<div class="setup-section">
+  <div class="setup-card">
+    <div class="setup-title">📁 How to add your GoPro Max images</div>
+    <div class="setup-steps">
+      <div class="setup-step"><span class="setup-num">1.</span><span>Export your 360° photos from GoPro Max as <strong>equirectangular JPEGs</strong> (use GoPro Player or GoPro Max Exporter — choose "360 Export").</span></div>
+      <div class="setup-step"><span class="setup-num">2.</span><span>Place all JPEG files in the same folder as this HTML file (or a subfolder, e.g. <code>360photos/</code>).</span></div>
+      <div class="setup-step"><span class="setup-num">3.</span><span>In the <code>scenes</code> array in the &lt;script&gt; below, update each <code>image</code> path to match your filenames, e.g. <code>"360photos/GSAB1234.JPG"</code>, and update the <code>label</code> to describe the room.</span></div>
+      <div class="setup-step"><span class="setup-num">4.</span><span>For thumbnails, the page automatically uses the same image file (cropped to the centre strip). No separate thumbnail needed.</span></div>
+      <div class="setup-step"><span class="setup-num">5.</span><span>Open the page in a browser — it must be served from a local or web server (e.g. VS Code Live Server, or upload to your hosting). Direct file:// access may block image loading due to browser security.</span></div>
+    </div>
+  </div>
+</div>
+
+<a href="gallery.html" class="back-link">Back to Photo Gallery</a>
+
+<footer>
+  &copy; 2025 &nbsp;·&nbsp; Park 24 &nbsp;·&nbsp; 360° imagery captured with GoPro Max
+</footer>
+
+<script>
+  // ─────────────────────────────────────────────────────────────────
+  // SCENES CONFIG — replace image paths with your actual GoPro Max
+  // equirectangular JPEG filenames. Add or remove scene objects as needed.
+  // ─────────────────────────────────────────────────────────────────
+  const scenes = [
+    {
+      label: "Scene 1",
+      icon: "📷",
+      image: "360photos/scene-01.jpg",
+      pitch: 0,
+      yaw: 0
+    },
+    {
+      label: "Scene 2",
+      icon: "📷",
+      image: "360photos/scene-02.jpg",
+      pitch: 0,
+      yaw: 0
+    },
+    {
+      label: "Scene 3",
+      icon: "📷",
+      image: "360photos/scene-03.jpg",
+      pitch: 0,
+      yaw: 0
+    },
+    {
+      label: "Scene 4",
+      icon: "📷",
+      image: "360photos/scene-04.jpg",
+      pitch: 0,
+      yaw: 0
+    },
+    {
+      label: "Scene 5",
+      icon: "📷",
+      image: "360photos/scene-05.jpg",
+      pitch: 0,
+      yaw: 0
+    },
+    {
+      label: "Scene 6",
+      icon: "📷",
+      image: "360photos/scene-06.jpg",
+      pitch: 0,
+      yaw: 0
+    },
+    {
+      label: "Scene 7",
+      icon: "📷",
+      image: "360photos/scene-07.jpg",
+      pitch: 0,
+      yaw: 0
+    },
+    {
+      label: "Scene 8",
+      icon: "📷",
+      image: "360photos/scene-08.jpg",
+      pitch: 0,
+      yaw: 0
+    },
+    {
+      label: "Scene 9",
+      icon: "📷",
+      image: "360photos/scene-09.jpg",
+      pitch: 0,
+      yaw: 0
+    },
+    {
+      label: "Scene 10",
+      icon: "📷",
+      image: "360photos/scene-10.jpg",
+      pitch: 0,
+      yaw: 0
+    },
+    {
+      label: "Scene 11",
+      icon: "📷",
+      image: "360photos/scene-11.jpg",
+      pitch: 0,
+      yaw: 0
+    }
+  ];
+
+  // ─────────────────────────────────────────────────────────────────
+  // VIEWER STATE
+  // ─────────────────────────────────────────────────────────────────
+  let currentIndex = 0;
+  let viewer = null;
+  let autorotateOn = true;
+
+  function initViewer(index) {
+    const scene = scenes[index];
+    if (viewer) {
+      viewer.destroy();
+      viewer = null;
+    }
+
+    viewer = pannellum.viewer('panorama-viewer', {
+      type: 'equirectangular',
+      panorama: scene.image,
+      pitch: scene.pitch || 0,
+      yaw: scene.yaw || 0,
+      hfov: 100,
+      autoLoad: true,
+      autoRotate: autorotateOn ? -2 : 0,
+      autoRotateInactivityDelay: 2000,
+      showControls: true,
+      showFullscreenCtrl: true,
+      showZoomCtrl: true,
+      mouseZoom: true,
+      draggable: true,
+      keyboardZoom: true,
+      touchPanSpeedCoeffFactor: 1,
+      compass: false,
+      preview: '',
+      strings: {
+        loadButtonLabel: 'Click to<br>Load 360°',
+        loadingLabel: 'Loading…',
+        bylineLabel: '',
+        noPanoramaUrl: 'No panorama found — check the image path in the scenes config.',
+        fileAccessError: 'Image not found: %s — update the path in the scenes config.',
+        fileAccessErrorPT1: 'Image not found:',
+        fileAccessErrorPT2: '— check the path in scenes config.',
+        defaultError: 'Could not load panorama.',
+        cssError: 'Unable to load Pannellum CSS.',
+        unknown: 'Unknown error.',
+        notMimeType: 'Incorrect MIME type.',
+      }
+    });
+
+    updateUI(index);
+  }
+
+  function updateUI(index) {
+    document.getElementById('viewer-label').textContent = scenes[index].label;
+    document.getElementById('viewer-count').textContent = (index + 1) + ' of ' + scenes.length;
+    document.getElementById('btn-prev').disabled = index === 0;
+    document.getElementById('btn-next').disabled = index === scenes.length - 1;
+
+    document.querySelectorAll('.thumb-item').forEach((el, i) => {
+      el.classList.toggle('active', i === index);
+    });
+  }
+
+  function changeScene(dir) {
+    const next = currentIndex + dir;
+    if (next < 0 || next >= scenes.length) return;
+    currentIndex = next;
+    initViewer(currentIndex);
+  }
+
+  function jumpToScene(index) {
+    currentIndex = index;
+    initViewer(currentIndex);
+  }
+
+  function toggleAutorotate() {
+    autorotateOn = !autorotateOn;
+    const btn = document.getElementById('autorotate-btn');
+    btn.classList.toggle('on', autorotateOn);
+    if (viewer) {
+      if (autorotateOn) {
+        viewer.startAutoRotate(-2);
+      } else {
+        viewer.stopAutoRotate();
+      }
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────────
+  // BUILD THUMBNAIL STRIP
+  // ─────────────────────────────────────────────────────────────────
+  function buildThumbs() {
+    const strip = document.getElementById('thumb-strip');
+    scenes.forEach((scene, i) => {
+      const item = document.createElement('div');
+      item.className = 'thumb-item' + (i === 0 ? ' active' : '');
+      item.onclick = () => jumpToScene(i);
+
+      // Try to show the actual image as thumbnail; fallback to placeholder
+      item.innerHTML = `
+        <img
+          class="thumb-img"
+          src="${scene.image}"
+          alt="${scene.label}"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        />
+        <div class="thumb-placeholder" style="display:none; background: linear-gradient(135deg,#2a2a2a,#1a1a1a);">
+          <span class="room-icon">${scene.icon}</span>
+          <span>${scene.label}</span>
+        </div>
+        <div class="thumb-360-badge">360°</div>
+        <div class="thumb-label">${scene.label}</div>
+      `;
+      strip.appendChild(item);
+    });
+  }
+
+  // ─────────────────────────────────────────────────────────────────
+  // KEYBOARD NAVIGATION
+  // ─────────────────────────────────────────────────────────────────
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') changeScene(1);
+    if (e.key === 'ArrowLeft') changeScene(-1);
+  });
+
+  // ─────────────────────────────────────────────────────────────────
+  // INIT
+  // ─────────────────────────────────────────────────────────────────
+  buildThumbs();
+  initViewer(0);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — Park 24</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --cream: #f5f0e8;
+      --warm-white: #faf8f4;
+      --charcoal: #1c1c1c;
+      --stone: #7a7264;
+      --gold: #b8975a;
+      --gold-light: #d4b07a;
+      --border: #e0d8cc;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--warm-white); color: var(--charcoal); min-height: 100vh; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(250, 248, 244, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2rem; height: 64px;
+    }
+    .nav-brand { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 600; letter-spacing: 0.04em; color: var(--charcoal); text-decoration: none; }
+    @media (max-width: 600px) { .nav-brand { display: none; } }
+    .nav-links { display: flex; gap: 0.1rem; align-items: center; }
+    .nav-links a { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: var(--stone); text-decoration: none; padding: 0.4rem 0.7rem; border-radius: 2rem; transition: all 0.2s; white-space: nowrap; }
+    .nav-links a:hover, .nav-links a.active { background: var(--charcoal); color: var(--cream); }
+
+    /* QUICK NAV — desktop only */
+    .quick-nav { display: none; }
+    @media (min-width: 768px) {
+      .quick-nav {
+        display: flex; gap: 0.75rem;
+        max-width: 1140px; margin: 0 auto;
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid var(--border);
+      }
+    }
+    .quick-nav a {
+      flex: 1; display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+      background: var(--cream); border: 1px solid var(--border); border-radius: 8px;
+      padding: 0.7rem 1rem; text-decoration: none; color: var(--charcoal);
+      font-size: 0.78rem; font-weight: 500; letter-spacing: 0.05em; text-transform: uppercase;
+      transition: all 0.2s; white-space: nowrap;
+    }
+    .quick-nav a:hover { background: var(--charcoal); color: var(--cream); border-color: var(--charcoal); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    .quick-nav a.active { background: var(--charcoal); color: var(--cream); border-color: var(--charcoal); }
+    .quick-nav-icon { font-size: 1rem; }
+
+    /* LAYOUT */
+    .page-wrap {
+      margin-top: 55px;
+      max-width: 1140px; margin-left: auto; margin-right: auto;
+      padding: 2rem 1.5rem 5rem;
+      display: grid;
+      grid-template-columns: 1fr;
+      max-width: 680px;
+      align-items: start;
+    }
+    @media (max-width: 780px) { .page-wrap { grid-template-columns: 1fr; gap: 2.5rem; margin-top: 55px; } }
+
+    /* LEFT COLUMN */
+    .section-label { font-size: 0.7rem; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin-bottom: 0.8rem; }
+    .left-col h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(2rem, 5vw, 3rem); font-weight: 300; line-height: 1.15; margin-bottom: 1.2rem; }
+    .left-col p { color: var(--stone); font-size: 0.93rem; line-height: 1.8; margin-bottom: 2rem; max-width: 400px; }
+
+    /* AGENT CARD */
+    .agent-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      background: var(--cream);
+      margin-bottom: 1.5rem;
+    }
+    .agent-card-header {
+      background: var(--charcoal);
+      padding: 1.5rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .agent-avatar {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .agent-info .agent-name { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 400; color: #fff; }
+    .agent-info .agent-role { font-size: 0.75rem; letter-spacing: 0.06em; color: rgba(255,255,255,0.45); margin-top: 0.1rem; text-transform: uppercase; }
+
+    .agent-body { padding: 1.5rem; }
+    .contact-row {
+      display: flex; align-items: flex-start; gap: 0.9rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .contact-row:last-child { border-bottom: none; }
+    .contact-icon {
+      width: 36px; height: 36px; border-radius: 8px;
+      background: rgba(184, 151, 90, 0.12);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .contact-detail { display: flex; flex-direction: column; gap: 0.15rem; }
+    .contact-type { font-size: 0.7rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--stone); }
+    .contact-value { font-size: 0.95rem; color: var(--charcoal); font-weight: 500; text-decoration: none; transition: color 0.18s; }
+    a.contact-value:hover { color: var(--gold); }
+
+    /* OFFICE CARD */
+    .office-card {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      background: var(--cream);
+    }
+    .office-card-title { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; font-weight: 400; margin-bottom: 1.1rem; color: var(--charcoal); }
+    .office-detail-row {
+      display: flex; gap: 0.7rem; align-items: flex-start;
+      margin-bottom: 0.75rem;
+      font-size: 0.88rem;
+      color: var(--stone);
+      line-height: 1.5;
+    }
+    .office-detail-row strong { color: var(--charcoal); font-weight: 500; }
+    .odi { flex-shrink: 0; font-size: 1rem; }
+
+    /* OPENING HOURS TABLE */
+    .hours-table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; }
+    .hours-table tr td { padding: 0.35rem 0; font-size: 0.85rem; border-bottom: 1px solid var(--border); }
+    .hours-table tr:last-child td { border-bottom: none; }
+    .hours-table td:first-child { color: var(--stone); }
+    .hours-table td:last-child { text-align: right; font-weight: 500; color: var(--charcoal); }
+
+    /* ACCREDITATIONS */
+    .accred-row {
+      display: flex; gap: 0.7rem; flex-wrap: wrap; margin-top: 1.2rem;
+    }
+    .accred-badge {
+      font-size: 0.7rem; letter-spacing: 0.07em; text-transform: uppercase;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 0.3rem 0.65rem;
+      color: var(--stone);
+    }
+
+    /* RIGHT COLUMN — ENQUIRY FORM */
+    .enquiry-card {
+      background: var(--charcoal);
+      border-radius: 16px;
+      padding: 2.2rem;
+      position: sticky;
+      top: 84px;
+    }
+    .enquiry-card h2 { font-family: 'Cormorant Garamond', serif; font-size: 1.7rem; font-weight: 300; color: #fff; margin-bottom: 0.4rem; }
+    .enquiry-card > p { font-size: 0.85rem; color: rgba(255,255,255,0.45); margin-bottom: 1.8rem; line-height: 1.6; }
+
+    .form-row { margin-bottom: 1.1rem; }
+    .form-row label { display: block; font-size: 0.72rem; letter-spacing: 0.09em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-bottom: 0.4rem; }
+    .form-row input,
+    .form-row select,
+    .form-row textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.07);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 7px;
+      padding: 0.75rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      color: #fff;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      -webkit-appearance: none;
+    }
+    .form-row input::placeholder,
+    .form-row textarea::placeholder { color: rgba(255,255,255,0.2); }
+    .form-row input:focus,
+    .form-row select:focus,
+    .form-row textarea:focus {
+      border-color: var(--gold);
+      background: rgba(255,255,255,0.1);
+    }
+    .form-row select option { background: #2c2c2c; color: #fff; }
+    .form-row textarea { resize: vertical; min-height: 110px; }
+
+    .form-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 420px) { .form-two-col { grid-template-columns: 1fr; } }
+
+    .form-consent { display: flex; align-items: flex-start; gap: 0.65rem; margin-bottom: 1.4rem; }
+    .form-consent input[type="checkbox"] { margin-top: 3px; accent-color: var(--gold); flex-shrink: 0; }
+    .form-consent label { font-size: 0.78rem; color: rgba(255,255,255,0.35); line-height: 1.5; }
+    .form-consent label a { color: rgba(255,255,255,0.5); }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--gold);
+      color: #fff;
+      border: none; cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 1rem;
+      border-radius: 8px;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .btn-submit:hover { background: var(--gold-light); transform: translateY(-1px); }
+    .btn-submit:active { transform: translateY(0); }
+
+    .form-note { margin-top: 1rem; font-size: 0.75rem; text-align: center; color: rgba(255,255,255,0.25); letter-spacing: 0.03em; }
+
+    /* SUCCESS STATE */
+    .form-success {
+      display: none;
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+    .form-success-icon { font-size: 2.5rem; margin-bottom: 0.8rem; }
+    .form-success h3 { font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; font-weight: 300; color: #fff; margin-bottom: 0.5rem; }
+    .form-success p { font-size: 0.85rem; color: rgba(255,255,255,0.45); line-height: 1.7; }
+
+    /* MAP PLACEHOLDER */
+    .map-placeholder {
+      margin-top: 3rem;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      height: 280px;
+      background: linear-gradient(135deg, #e0d8cc, #cdc4b4);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .map-placeholder:hover { opacity: 0.9; }
+    .map-icon { font-size: 2.2rem; }
+    .map-label { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; color: var(--charcoal); }
+    .map-sub { font-size: 0.78rem; color: var(--stone); letter-spacing: 0.04em; }
+
+    /* BACK LINK */
+    .back-link { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 2.5rem; font-size: 0.83rem; color: var(--stone); text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s, gap 0.2s; }
+    .back-link:hover { color: var(--charcoal); gap: 0.65rem; }
+    .back-link::before { content: '←'; }
+
+    footer { border-top: 1px solid var(--border); padding: 2rem 1.5rem; text-align: center; font-size: 0.78rem; color: var(--stone); letter-spacing: 0.04em; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-brand">Park 24</a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="360-gallery.html">360° Tour</a>
+    <a href="contact.html" class="active">Contact</a>
+  </div>
+</nav>
+
+<!-- QUICK NAV (desktop only) -->
+<div class="quick-nav">
+  <a href="index.html"><span class="quick-nav-icon">🏠</span> Home</a>
+  <a href="gallery.html"><span class="quick-nav-icon">🖼️</span> Gallery</a>
+  <a href="360-gallery.html"><span class="quick-nav-icon">🔭</span> 360° Tour</a>
+</div>
+
+<div class="page-wrap">
+
+  <!-- LEFT: AGENT DETAILS -->
+  <div class="left-col">
+    <div class="section-label">Letting Agent</div>
+    <h1>Get in Touch</h1>
+    <p>Our team is available Monday to Saturday to answer questions about the property and guide you through the letting process.</p>
+
+    <!-- AGENT CARD -->
+    <div class="agent-card">
+      <div class="agent-card-header">
+        <div class="agent-avatar">SP</div>
+        <div class="agent-info">
+          <div class="agent-name">Sarah Pemberton</div>
+          <div class="agent-role">Senior Lettings Negotiator</div>
+        </div>
+      </div>
+      <div class="agent-body">
+        <div class="contact-row">
+          <div class="contact-icon">📞</div>
+          <div class="contact-detail">
+            <span class="contact-type">Line</span>
+            <a href="tel:+6620461200" class="contact-value">+66 (0)20 461 200</a>
+          </div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-icon">📱</div>
+          <div class="contact-detail">
+            <span class="contact-type">Phone</span>
+            <a href="tel:+66700900123" class="contact-value">+66 (0)700 900 123</a>
+          </div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-icon">💬</div>
+          <div class="contact-detail">
+            <span class="contact-type">WhatsApp</span>
+            <a href="https://wa.me/66700900123" class="contact-value">+66 (0)700 900 123</a>
+          </div>
+        </div>
+        <div class="contact-row">
+          <div class="contact-icon">✉️</div>
+          <div class="contact-detail">
+            <span class="contact-type">Email</span>
+            <a href="mailto:s.pemberton@kensingtonlettings.co.uk" class="contact-value">s.pemberton@kensingtonlettings.co.uk</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <a href="index.html" class="back-link">Back to Overview</a>
+  </div>
+
+
+
+</div>
+
+<footer>
+  &copy; 2025 &nbsp;·&nbsp; Kensington Lettings Ltd &nbsp;·&nbsp; Registered in England &amp; Wales No. 08741256 &nbsp;·&nbsp; Authorised by ARLA Propertymark
+</footer>
+
+<script>
+  function submitForm() {
+    const consent = document.getElementById('consent').checked;
+    if (!consent) {
+      alert('Please agree to the privacy policy to continue.');
+      return;
+    }
+    document.getElementById('enquiry-form').style.display = 'none';
+    document.getElementById('form-success').style.display = 'block';
+  }
+</script>
+
+</body>
+</html>
